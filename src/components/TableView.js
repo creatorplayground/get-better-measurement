@@ -30,9 +30,14 @@ function TableView() {
   const [sortKey, setSortKey] = useState(null);
   const [ascending, setAscending] = useState(true);
   const [activeCriteria, setActiveCriteria] = useState(null);
+  // Drag-to-scroll state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const scrollRef = React.useRef(null);
 
   useEffect(() => {
-    fetch('/data_2025-07-03.csv')
+    fetch('/data_2025-07-03-14-54-08.csv')
       .then((res) => res.text())
       .then((text) => {
         Papa.parse(text, {
@@ -46,6 +51,26 @@ function TableView() {
         });
       });
   }, []);
+
+  // Drag-to-scroll handlers
+  const handleMouseDown = (e) => {
+    const slider = scrollRef.current;
+    setIsDragging(true);
+    setStartX(e.pageX - slider.offsetLeft);
+    setScrollLeft(slider.scrollLeft);
+  };
+
+  const handleMouseLeave = () => setIsDragging(false);
+  const handleMouseUp = () => setIsDragging(false);
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const slider = scrollRef.current;
+    const x = e.pageX - slider.offsetLeft;
+    const walk = x - startX;
+    slider.scrollLeft = scrollLeft - walk;
+  };
 
   const filteredData = data.filter((row) => {
     return ['company_name', 'product_category', 'proprietary_measurement'].some((key) => {
@@ -178,7 +203,14 @@ function TableView() {
             </button>
           </div>
           <div className="border border-[#03039d] rounded-md">
-            <div className="overflow-x-auto border-4 border-white scrollbar-hide scrollbar-hidden rounded-md bg-white">
+            <div
+              ref={scrollRef}
+              className="overflow-x-auto border-4 border-white scrollbar-hide scrollbar-hidden rounded-md bg-white cursor-grab active:cursor-grabbing select-none"
+              onMouseDown={handleMouseDown}
+              onMouseLeave={handleMouseLeave}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+            >
               <table className="table-fixed min-w-full divide-y divide-gray-200 text-left text-gray-700">
                 <thead className="bg-white">
                   <tr>
