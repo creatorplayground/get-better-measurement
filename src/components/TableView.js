@@ -177,7 +177,7 @@ function TableView() {
               Reset
             </button>
           </div>
-          <div className="overflow-x-auto border border-[#03039d] scrollbar-hide rounded-md bg-white">
+          <div className="overflow-x-auto border border-[#03039d] scrollbar-hide scrollbar-hidden rounded-md bg-white">
             <table className="table-fixed min-w-full divide-y divide-gray-200 text-left text-gray-700">
               <thead className="bg-white">
                 <tr>
