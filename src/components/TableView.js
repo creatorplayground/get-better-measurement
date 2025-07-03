@@ -177,106 +177,108 @@ function TableView() {
               Reset
             </button>
           </div>
-          <div className="overflow-x-auto border border-[#03039d] scrollbar-hide scrollbar-hidden rounded-md bg-white">
-            <table className="table-fixed min-w-full divide-y divide-gray-200 text-left text-gray-700">
-              <thead className="bg-white">
-                <tr>
-                  {data.length > 0 &&
-                    Object.keys(data[0])
-                      .filter((key) => key !== 'website_url')
-                      .map((key) => (
-                        <th
-                          key={key}
-                          className={`whitespace-nowrap py-4 font-medium text-sm text-[#03039d] ${key === 'company_name' ? '' : ''} ${
-                            ['company_name', 'employee_count', 'year_founded'].includes(key)
-                              ? 'px-4 w-[200px] min-w-[200px] max-w-[200px]'
-                              : key.includes('_criteria_')
-                                ? 'px-2 w-[120px] min-w-[120px]'
-                                : 'px-4'
-                          }`}
-                        >
-                          <div className="flex items-center gap-1">
-                            <span>{headerLabels[key] || key}</span>
-                            {[
-                              'feature_criteria_discover',
-                              'feature_criteria_target',
-                              'feature_criteria_publish',
-                              'feature_criteria_manage',
-                              'feature_criteria_measure',
-                              'feature_criteria_report',
-                              'feature_criteria_optimize',
-                              'data_criteria_owned',
-                              'data_criteria_rented',
-                              'insight_criteria_predictive',
-                              'insight_criteria_reporting',
-                            ].includes(key) && (
-                              <button onClick={() => setActiveCriteria(key)} className="text-gray-300 hover:text-gray-600">
-                                <InformationCircleIcon className="h-4 w-4" />
-                              </button>
-                            )}
-                          </div>
-                        </th>
-                      ))}
-                </tr>
-              </thead>
-              <tbody>
-                {sortedData.map((row, idx) => (
-                  <tr key={idx} className="hover:bg-gray-50 border-b border-white">
-                    {Object.entries(row)
-                      .filter(([key]) => key !== 'website_url')
-                      .map(([key, val], i) => {
-                        const content =
-                          key === 'company_name' && row.website_url ? (
-                            <a
-                              href={row.website_url.startsWith('http') ? row.website_url : `https://${row.website_url}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="block w-full h-full px-4 py-4 text-left hover:bg-gray-100 font-medium text-gray-950"
-                            >
-                              {val}
-                            </a>
-                          ) : val == null ? (
-                            ''
-                          ) : (
-                            String(val)
-                          );
-                        return (
-                          <td
-                            key={i}
-                            className={`relative whitespace-nowrap ${
-                              key === 'company_name' ? 'bg-gray-50 z-10 border-r border-gray-200' : 'px-4 py-4'
-                            } ${key.includes('_criteria_') ? '' : 'text-gray-700'}`}
+          <div className="border border-[#03039d] rounded-md">
+            <div className="overflow-x-auto border-4 border-white scrollbar-hide scrollbar-hidden rounded-md bg-white">
+              <table className="table-fixed min-w-full divide-y divide-gray-200 text-left text-gray-700">
+                <thead className="bg-white">
+                  <tr>
+                    {data.length > 0 &&
+                      Object.keys(data[0])
+                        .filter((key) => key !== 'website_url')
+                        .map((key) => (
+                          <th
+                            key={key}
+                            className={`whitespace-nowrap py-4 font-medium text-sm text-[#03039d] ${key === 'company_name' ? '' : ''} ${
+                              ['company_name', 'employee_count', 'year_founded'].includes(key)
+                                ? 'px-4 w-[200px] min-w-[200px] max-w-[200px]'
+                                : key.includes('_criteria_')
+                                  ? 'px-2 w-[120px] min-w-[120px]'
+                                  : 'px-4'
+                            }`}
                           >
-                            {key.includes('_criteria_') && (val === 'Yes' || val === 'No') ? (
-                              <div
-                                className={`absolute inset-0 border-2 border-white rounded-md p-0 ${
-                                  val === 'Yes'
-                                    ? key === 'feature_criteria_discover' || key === 'feature_criteria_target'
-                                      ? 'bg-[#61c1b6]'
-                                      : key === 'feature_criteria_publish' || key === 'feature_criteria_manage'
-                                        ? 'bg-[#d4373e]'
-                                        : key === 'feature_criteria_measure' ||
-                                            key === 'feature_criteria_report' ||
-                                            key === 'feature_criteria_optimize'
-                                          ? 'bg-[#f2a341]'
-                                          : key === 'data_criteria_owned' || key === 'data_criteria_rented'
-                                            ? 'bg-[#909090]'
-                                            : key === 'insight_criteria_predictive' || key === 'insight_criteria_reporting'
-                                              ? 'bg-[#909090]'
-                                              : ''
-                                    : ''
-                                }`}
-                              />
-                            ) : (
-                              content
-                            )}
-                          </td>
-                        );
-                      })}
+                            <div className="flex items-center gap-1">
+                              <span>{headerLabels[key] || key}</span>
+                              {[
+                                'feature_criteria_discover',
+                                'feature_criteria_target',
+                                'feature_criteria_publish',
+                                'feature_criteria_manage',
+                                'feature_criteria_measure',
+                                'feature_criteria_report',
+                                'feature_criteria_optimize',
+                                'data_criteria_owned',
+                                'data_criteria_rented',
+                                'insight_criteria_predictive',
+                                'insight_criteria_reporting',
+                              ].includes(key) && (
+                                <button onClick={() => setActiveCriteria(key)} className="text-gray-300 hover:text-gray-600">
+                                  <InformationCircleIcon className="h-4 w-4" />
+                                </button>
+                              )}
+                            </div>
+                          </th>
+                        ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {sortedData.map((row, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50 border-b border-white">
+                      {Object.entries(row)
+                        .filter(([key]) => key !== 'website_url')
+                        .map(([key, val], i) => {
+                          const content =
+                            key === 'company_name' && row.website_url ? (
+                              <a
+                                href={row.website_url.startsWith('http') ? row.website_url : `https://${row.website_url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full h-full px-4 py-4 text-left hover:bg-gray-100 font-medium text-gray-950"
+                              >
+                                {val}
+                              </a>
+                            ) : val == null ? (
+                              ''
+                            ) : (
+                              String(val)
+                            );
+                          return (
+                            <td
+                              key={i}
+                              className={`relative whitespace-nowrap ${
+                                key === 'company_name' ? 'bg-gray-50 z-10 border-r border-gray-200' : 'px-4 py-4'
+                              } ${key.includes('_criteria_') ? '' : 'text-gray-700'}`}
+                            >
+                              {key.includes('_criteria_') && (val === 'Yes' || val === 'No') ? (
+                                <div
+                                  className={`absolute inset-0 border-2 border-white rounded-md p-0 ${
+                                    val === 'Yes'
+                                      ? key === 'feature_criteria_discover' || key === 'feature_criteria_target'
+                                        ? 'bg-[#61c1b6]'
+                                        : key === 'feature_criteria_publish' || key === 'feature_criteria_manage'
+                                          ? 'bg-[#d4373e]'
+                                          : key === 'feature_criteria_measure' ||
+                                              key === 'feature_criteria_report' ||
+                                              key === 'feature_criteria_optimize'
+                                            ? 'bg-[#f2a341]'
+                                            : key === 'data_criteria_owned' || key === 'data_criteria_rented'
+                                              ? 'bg-[#909090]'
+                                              : key === 'insight_criteria_predictive' || key === 'insight_criteria_reporting'
+                                                ? 'bg-[#909090]'
+                                                : ''
+                                      : ''
+                                  }`}
+                                />
+                              ) : (
+                                content
+                              )}
+                            </td>
+                          );
+                        })}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
@@ -327,15 +329,15 @@ function TableView() {
       <div className="page-footer mt-10 mx-auto text-left text-gray-500 text-sm space-y-2">
         <p>
           Presented by{' '}
-          <a href="https://www.eastwindadvisors.com/" target="_blank" className="text-gray-900 hover:underline">
+          <a href="https://www.eastwindadvisors.com/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
             East Wind Advisors
           </a>
           ,{' '}
-          <a href="https://www.creatorvision.co/" target="_blank" className="text-gray-900 hover:underline">
+          <a href="https://www.creatorvision.co/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
             Creator Vision
           </a>{' '}
           +{' '}
-          <a href="https://www.creatorplayground.io/" target="_blank" className="text-gray-900 hover:underline">
+          <a href="https://www.creatorplayground.io/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
             Creator Playground
           </a>
         </p>
