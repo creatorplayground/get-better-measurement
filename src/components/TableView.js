@@ -73,8 +73,8 @@ function TableView() {
   return (
     <div className="min-h-screen bg-[#f4f2f1] px-4 pb-16">
       <div className="page-container mx-auto">
-        <div className="page-header py-10">
-          <h1 className="text-4xl font-bold text-gray-950">Get Better Measurement</h1>
+        <div className="page-header py-8">
+          <h1 className="text-2xl font-bold text-gray-800">Get Better Measurement</h1>
         </div>
         <div className="page-content">
           <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
