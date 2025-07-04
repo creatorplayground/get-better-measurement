@@ -30,6 +30,7 @@ function TableView() {
   const [sortKey, setSortKey] = useState(null);
   const [ascending, setAscending] = useState(true);
   const [activeCriteria, setActiveCriteria] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
   // Drag-to-scroll state
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -102,106 +103,118 @@ function TableView() {
           <h1 className="text-2xl font-bold text-gray-800">Get Better Measurement</h1>
         </div>
         <div className="page-content">
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <input
-              id="filter"
-              name="filter"
-              type="text"
-              placeholder="Search by Company, Category, or Measurement"
-              aria-label="Filter"
-              value={filterText}
-              onChange={(e) => setFilterText(e.target.value)}
-              className="block w-full rounded-md bg-white px-4 py-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm sm:w-1/2"
-            />
-            <div className="w-full sm:w-1/4">
-              <Listbox value={sortKey} onChange={(value) => setSortKey(value || null)}>
-                <div className="relative">
-                  <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-3 pl-4 pr-2 text-left text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm">
-                    <span className="col-start-1 row-start-1 truncate pr-6">{sortKey ? headerLabels[sortKey] || sortKey : 'Sort'}</span>
-                    <ChevronUpDownIcon
-                      aria-hidden="true"
-                      className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                    />
-                  </ListboxButton>
-
-                  <ListboxOptions
-                    transition
-                    className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
-                  >
-                    <ListboxOption value="" className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
-                      <span className="block truncate font-normal">Sort by...</span>
-                    </ListboxOption>
-                    {data.length > 0 &&
-                      Object.keys(data[0])
-                        .filter((key) => key !== 'website_url')
-                        .map((key) => (
-                          <ListboxOption
-                            key={key}
-                            value={key}
-                            className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
-                          >
-                            <span className="block truncate font-normal group-data-[selected]:font-semibold">
-                              {headerLabels[key] || key}
-                            </span>
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-[&:not([data-selected])]:hidden group-data-[focus]:text-white">
-                              <CheckIcon aria-hidden="true" className="size-5" />
-                            </span>
-                          </ListboxOption>
-                        ))}
-                  </ListboxOptions>
-                </div>
-              </Listbox>
-            </div>
-            {(() => {
-              const sortOrders = [
-                { id: 'asc', label: 'Ascending' },
-                { id: 'desc', label: 'Descending' },
-              ];
-              const currentOrder = ascending ? sortOrders[0] : sortOrders[1];
-              return (
-                <div className="w-full sm:w-1/4">
-                  <Listbox value={currentOrder} onChange={(value) => setAscending(value.id === 'asc')}>
-                    <div className="relative">
-                      <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-3 pl-4 pr-2 text-left text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm">
-                        <span className="col-start-1 row-start-1 truncate pr-6">{currentOrder.label}</span>
-                        <ChevronUpDownIcon
-                          aria-hidden="true"
-                          className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                        />
-                      </ListboxButton>
-                      <ListboxOptions
-                        transition
-                        className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
-                      >
-                        {sortOrders.map((option) => (
-                          <ListboxOption
-                            key={option.id}
-                            value={option}
-                            className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
-                          >
-                            <span className="block truncate font-normal group-data-[selected]:font-semibold">{option.label}</span>
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-[&:not([data-selected])]:hidden group-data-[focus]:text-white">
-                              <CheckIcon aria-hidden="true" className="size-5" />
-                            </span>
-                          </ListboxOption>
-                        ))}
-                      </ListboxOptions>
-                    </div>
-                  </Listbox>
-                </div>
-              );
-            })()}
+          <div className="mb-4 sm:hidden">
             <button
-              onClick={() => {
-                setFilterText('');
-                setSortKey(null);
-                setAscending(true);
-              }}
-              className="w-full sm:w-auto rounded-md bg-white px-4 py-3 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50"
+              onClick={() => setShowFilters((prev) => !prev)}
+              className={`w-full rounded-md px-4 py-3 text-sm text-white ${
+                showFilters ? 'bg-gray-500 hover:bg-gray-400' : 'bg-indigo-600 hover:bg-indigo-500'
+              }`}
             >
-              Reset
+              {showFilters ? 'Close' : 'Search'}
             </button>
           </div>
+          {(showFilters || typeof window === 'undefined' /* SSR fallback */ || window.innerWidth >= 640) && (
+            <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <input
+                id="filter"
+                name="filter"
+                type="text"
+                placeholder="Search by Company, Category, or Measurement"
+                aria-label="Filter"
+                value={filterText}
+                onChange={(e) => setFilterText(e.target.value)}
+                className="block w-full rounded-md bg-white px-4 py-3 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm sm:w-1/2"
+              />
+              <div className="w-full sm:w-1/4">
+                <Listbox value={sortKey} onChange={(value) => setSortKey(value || null)}>
+                  <div className="relative">
+                    <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-3 pl-4 pr-2 text-left text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm">
+                      <span className="col-start-1 row-start-1 truncate pr-6">{sortKey ? headerLabels[sortKey] || sortKey : 'Sort'}</span>
+                      <ChevronUpDownIcon
+                        aria-hidden="true"
+                        className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                      />
+                    </ListboxButton>
+
+                    <ListboxOptions
+                      transition
+                      className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
+                    >
+                      <ListboxOption value="" className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
+                        <span className="block truncate font-normal">Sort by...</span>
+                      </ListboxOption>
+                      {data.length > 0 &&
+                        Object.keys(data[0])
+                          .filter((key) => key !== 'website_url')
+                          .map((key) => (
+                            <ListboxOption
+                              key={key}
+                              value={key}
+                              className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+                            >
+                              <span className="block truncate font-normal group-data-[selected]:font-semibold">
+                                {headerLabels[key] || key}
+                              </span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-[&:not([data-selected])]:hidden group-data-[focus]:text-white">
+                                <CheckIcon aria-hidden="true" className="size-5" />
+                              </span>
+                            </ListboxOption>
+                          ))}
+                    </ListboxOptions>
+                  </div>
+                </Listbox>
+              </div>
+              {(() => {
+                const sortOrders = [
+                  { id: 'asc', label: 'Ascending' },
+                  { id: 'desc', label: 'Descending' },
+                ];
+                const currentOrder = ascending ? sortOrders[0] : sortOrders[1];
+                return (
+                  <div className="w-full sm:w-1/4">
+                    <Listbox value={currentOrder} onChange={(value) => setAscending(value.id === 'asc')}>
+                      <div className="relative">
+                        <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-3 pl-4 pr-2 text-left text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm">
+                          <span className="col-start-1 row-start-1 truncate pr-6">{currentOrder.label}</span>
+                          <ChevronUpDownIcon
+                            aria-hidden="true"
+                            className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                          />
+                        </ListboxButton>
+                        <ListboxOptions
+                          transition
+                          className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+                        >
+                          {sortOrders.map((option) => (
+                            <ListboxOption
+                              key={option.id}
+                              value={option}
+                              className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+                            >
+                              <span className="block truncate font-normal group-data-[selected]:font-semibold">{option.label}</span>
+                              <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-[&:not([data-selected])]:hidden group-data-[focus]:text-white">
+                                <CheckIcon aria-hidden="true" className="size-5" />
+                              </span>
+                            </ListboxOption>
+                          ))}
+                        </ListboxOptions>
+                      </div>
+                    </Listbox>
+                  </div>
+                );
+              })()}
+              <button
+                onClick={() => {
+                  setFilterText('');
+                  setSortKey(null);
+                  setAscending(true);
+                }}
+                className="w-full sm:w-auto rounded-md bg-white px-4 py-3 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50"
+              >
+                Reset
+              </button>
+            </div>
+          )}
           <div className="border border-[#03039d] rounded-md">
             <div
               ref={scrollRef}
@@ -313,75 +326,75 @@ function TableView() {
             </div>
           </div>
         </div>
+        <div className="page-footer mt-10 mx-auto text-left text-gray-500 text-sm space-y-2">
+          <p>
+            Presented by{' '}
+            <a href="https://www.eastwindadvisors.com/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
+              East Wind Advisors
+            </a>
+            ,{' '}
+            <a href="https://www.creatorvision.co/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
+              Creator Vision
+            </a>{' '}
+            +{' '}
+            <a href="https://www.creatorplayground.io/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
+              Creator Playground
+            </a>
+          </p>
+          <p>
+            Disclaimer: The information set forth herein has been obtained or derived from sources believed by East Wind Advisors (“East
+            Wind”) to be reliable. East Wind does not make any representation or warranty, express or implied, as to the information's
+            accuracy or completeness, nor does East Wind recommend that the information serve as the basis of any investment decision. Any
+            reliance on the information provided herein is solely at the user's own risk. Opinions and any other contents at this site are
+            subject to change without notice.
+          </p>
+          <p>Securities transactions conducted through East Wind Securities, LLC, a FINRA registered broker-dealer and member SIPC.</p>
+        </div>
+      </div>
 
-        {activeCriteria && (
-          <div className="page-dialogs fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-md shadow-lg max-w-md">
-              <h2 className="text-lg font-semibold mb-2 text-gray-900">{headerLabels[activeCriteria]}</h2>
-              <p className="text-gray-700 mb-4">
-                {(() => {
-                  switch (activeCriteria) {
-                    case 'feature_criteria_discover':
-                      return 'Search internal or external talent databases to find the most relevant creators for a campaign.';
-                    case 'feature_criteria_target':
-                      return 'Identify and define audience segments based on research and data.';
-                    case 'feature_criteria_publish':
-                      return 'Post content directly to social networks or video platforms from the product.';
-                    case 'feature_criteria_manage':
-                      return 'Organize and oversee project or campaign details, tasks, and communications.';
-                    case 'feature_criteria_measure':
-                      return 'Collect and aggregate data from internal or external sources for analysis.';
-                    case 'feature_criteria_report':
-                      return 'Generate reports or visual summaries that highlight key metrics and insights.';
-                    case 'feature_criteria_optimize':
-                      return 'Use data-driven insights to refine content and improve performance.';
-                    case 'data_criteria_owned':
-                      return 'Uses owned data like first-party customer or user information.';
-                    case 'data_criteria_rented':
-                      return 'Uses rented or third-party data sources to inform decision-making.';
-                    case 'insight_criteria_predictive':
-                      return 'Delivers predictive insights using modeling or forward-looking analysis.';
-                    case 'insight_criteria_reporting':
-                      return 'Delivers reporting insights based on historical data aggregation.';
-                    default:
-                      return '';
-                  }
-                })()}
-              </p>
-              <button
-                onClick={() => setActiveCriteria(null)}
-                className="px-4 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-500"
-              >
-                Close
-              </button>
-            </div>
+      {activeCriteria && (
+        <div className="page-dialogs fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
+          <div className="bg-white p-6 rounded-md shadow-lg max-w-md">
+            <h2 className="text-lg font-semibold mb-2 text-gray-900">{headerLabels[activeCriteria]}</h2>
+            <p className="text-gray-700 mb-4">
+              {(() => {
+                switch (activeCriteria) {
+                  case 'feature_criteria_discover':
+                    return 'Search internal or external talent databases to find the most relevant creators for a campaign.';
+                  case 'feature_criteria_target':
+                    return 'Identify and define audience segments based on research and data.';
+                  case 'feature_criteria_publish':
+                    return 'Post content directly to social networks or video platforms from the product.';
+                  case 'feature_criteria_manage':
+                    return 'Organize and oversee project or campaign details, tasks, and communications.';
+                  case 'feature_criteria_measure':
+                    return 'Collect and aggregate data from internal or external sources for analysis.';
+                  case 'feature_criteria_report':
+                    return 'Generate reports or visual summaries that highlight key metrics and insights.';
+                  case 'feature_criteria_optimize':
+                    return 'Use data-driven insights to refine content and improve performance.';
+                  case 'data_criteria_owned':
+                    return 'Uses owned data like first-party customer or user information.';
+                  case 'data_criteria_rented':
+                    return 'Uses rented or third-party data sources to inform decision-making.';
+                  case 'insight_criteria_predictive':
+                    return 'Delivers predictive insights using modeling or forward-looking analysis.';
+                  case 'insight_criteria_reporting':
+                    return 'Delivers reporting insights based on historical data aggregation.';
+                  default:
+                    return '';
+                }
+              })()}
+            </p>
+            <button
+              onClick={() => setActiveCriteria(null)}
+              className="px-4 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-500"
+            >
+              Close
+            </button>
           </div>
-        )}
-      </div>
-      <div className="page-footer mt-10 mx-auto text-left text-gray-500 text-sm space-y-2">
-        <p>
-          Presented by{' '}
-          <a href="https://www.eastwindadvisors.com/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
-            East Wind Advisors
-          </a>
-          ,{' '}
-          <a href="https://www.creatorvision.co/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
-            Creator Vision
-          </a>{' '}
-          +{' '}
-          <a href="https://www.creatorplayground.io/" target="_blank" rel="noreferrer" className="text-gray-900 hover:underline">
-            Creator Playground
-          </a>
-        </p>
-        <p>
-          Disclaimer: The information set forth herein has been obtained or derived from sources believed by East Wind Advisors (“East
-          Wind”) to be reliable. East Wind does not make any representation or warranty, express or implied, as to the information's
-          accuracy or completeness, nor does East Wind recommend that the information serve as the basis of any investment decision. Any
-          reliance on the information provided herein is solely at the user's own risk. Opinions and any other contents at this site are
-          subject to change without notice.
-        </p>
-        <p>Securities transactions conducted through East Wind Securities, LLC, a FINRA registered broker-dealer and member SIPC.</p>
-      </div>
+        </div>
+      )}
     </div>
   );
 }
