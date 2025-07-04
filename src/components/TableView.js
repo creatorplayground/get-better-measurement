@@ -126,7 +126,7 @@ function TableView() {
 
                   <ListboxOptions
                     transition
-                    className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+                    className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
                   >
                     <ListboxOption value="" className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900">
                       <span className="block truncate font-normal">Sort by...</span>
@@ -171,7 +171,7 @@ function TableView() {
                       </ListboxButton>
                       <ListboxOptions
                         transition
-                        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+                        className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
                       >
                         {sortOrders.map((option) => (
                           <ListboxOption
@@ -277,7 +277,7 @@ function TableView() {
                             <td
                               key={i}
                               className={`relative whitespace-nowrap ${
-                                key === 'company_name' ? 'bg-gray-50 z-10 border-r border-gray-200' : 'px-4 py-4'
+                                key === 'company_name' ? 'bg-gray-50 border-r border-gray-200' : 'px-4 py-4'
                               } ${key.includes('_criteria_') ? '' : 'text-gray-700'}`}
                             >
                               {key.includes('_criteria_') && (val === 'Yes' || val === 'No') ? (
