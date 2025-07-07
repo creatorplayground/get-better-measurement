@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Apples to Apples – Interactive Company Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is an interactive tool based on the "Get Better Measurement" report, which introduces a consistent framework for evaluating companies in the B2B creator economy.
 
-## Available Scripts
+Presented by East Wind Advisors, Creator Vision, and Creator Playground, the original report helps brands, agencies, and investors make more informed comparisons of platforms based on what they actually offer — from creator discovery to campaign reporting and predictive insights.
 
-In the project directory, you can run:
+## What This Tool Does
 
-### `npm start`
+This web app brings the PDF report to life as an interactive table. Instead of scrolling through static charts, you can now:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Search** for companies by name, category, or capabilities
+- **Filter** by features like discovery, measurement, and proprietary data
+- **Learn** what each feature means via pop-up explanations
+- **Explore** companies offering specific functions or unique value
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Our goal is to make it easier to compare platforms “apples to apples” and keep this list growing as the industry evolves.
 
-### `npm test`
+## Who It’s For
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Brands** looking to choose the right partners
+- **Agencies** evaluating the ecosystem
+- **Investors** assessing business models and differentiation
+- **Anyone** trying to understand the B2B creator economy landscape
 
-### `npm run build`
+## Want to Contribute?
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+This tool is meant to be a living resource. If you see something missing or miscategorized, feel free to open an issue or email us at [info@getbettermeasurement.com](mailto:info@getbettermeasurement.com).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Let’s build a clearer, more transparent creator tech ecosystem — together.
