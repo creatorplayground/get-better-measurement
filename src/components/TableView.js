@@ -31,7 +31,6 @@ function TableView() {
   const [ascending, setAscending] = useState(true);
   const [activeCriteria, setActiveCriteria] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
-  // Drag-to-scroll state
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
@@ -53,7 +52,6 @@ function TableView() {
       });
   }, []);
 
-  // Drag-to-scroll handlers
   const handleMouseDown = (e) => {
     const slider = scrollRef.current;
     setIsDragging(true);
