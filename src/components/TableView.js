@@ -234,11 +234,13 @@ function TableView() {
                           <th
                             key={key}
                             className={`whitespace-nowrap py-4 font-medium text-sm text-[#03039d] ${key === 'company_name' ? '' : ''} ${
-                              ['company_name', 'employee_count', 'year_founded'].includes(key)
+                              key === 'company_name'
                                 ? 'px-4 w-[200px] min-w-[200px] max-w-[200px]'
-                                : key.includes('_criteria_')
-                                  ? 'px-2 w-[120px] min-w-[120px]'
-                                  : 'px-4'
+                                : key === 'employee_count' || key === 'year_founded'
+                                  ? 'px-4 w-[120px] min-w-[140px] max-w-[120px]'
+                                  : key.includes('_criteria_')
+                                    ? 'px-2 w-[120px] min-w-[120px]'
+                                    : 'px-4'
                             }`}
                           >
                             <div className="flex items-center gap-1">
