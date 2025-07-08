@@ -97,15 +97,17 @@ function TableView() {
   return (
     <div className="min-h-screen bg-[#f4f2f1] px-4 pb-16">
       <div className="page-container mx-auto">
-        <div className="page-header py-8">
-          <h1 className="text-2xl font-bold text-gray-800">Get Better Measurement</h1>
+        <div className="page-header py-8 text-center">
+          <a href="https://www.getbettermeasurement.com/" className="text-[#03039d] underline hover:no-underline">
+            Return to Website
+          </a>
         </div>
         <div className="page-content">
           <div className="mb-4 sm:hidden">
             <button
               onClick={() => setShowFilters((prev) => !prev)}
               className={`w-full rounded-md px-4 py-3 text-sm text-white ${
-                showFilters ? 'bg-gray-500 hover:bg-gray-400' : 'bg-indigo-600 hover:bg-indigo-500'
+                showFilters ? 'bg-[#03039d] hover:opacity-60' : 'bg-[#03039d] hover:opacity-60'
               }`}
             >
               {showFilters ? 'Close' : 'Search'}
@@ -275,7 +277,7 @@ function TableView() {
                                 href={row.website_url.startsWith('http') ? row.website_url : `https://${row.website_url}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block w-full h-full px-4 py-4 text-left hover:bg-gray-100 font-medium text-gray-950"
+                                className="block w-full h-full px-4 py-4 text-left hover:bg-[#03039d] hover:bg-opacity-10 font-medium text-gray-950"
                               >
                                 {val}
                               </a>
