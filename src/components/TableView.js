@@ -11,6 +11,7 @@ const headerLabels = {
   website_url: 'Website',
   product_category: 'Category',
   proprietary_measurement: 'Proprietary Measurement',
+  has_ai: 'Includes AI',
   feature_criteria_discover: 'Discover', // #61c1b6
   feature_criteria_target: 'Target', // #61c1b6
   feature_criteria_publish: 'Publish', // #d4373e
@@ -37,7 +38,7 @@ function TableView() {
   const scrollRef = React.useRef(null);
 
   useEffect(() => {
-    fetch('/data_2025-07-03-14-54-08.csv')
+    fetch('/data_2025-07-10.csv')
       .then((res) => res.text())
       .then((text) => {
         Papa.parse(text, {
@@ -183,7 +184,7 @@ function TableView() {
                         </ListboxButton>
                         <ListboxOptions
                           transition
-                          className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+                          className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm z-50"
                         >
                           {sortOrders.map((option) => (
                             <ListboxOption
@@ -236,7 +237,7 @@ function TableView() {
                             className={`whitespace-nowrap py-4 font-medium text-sm text-[#03039d] ${key === 'company_name' ? '' : ''} ${
                               key === 'company_name'
                                 ? 'px-4 w-[200px] min-w-[200px] max-w-[200px]'
-                                : key === 'employee_count' || key === 'year_founded'
+                                : key === 'employee_count' || key === 'year_founded' || key === 'has_ai'
                                   ? 'px-4 w-[120px] min-w-[140px] max-w-[120px]'
                                   : key.includes('_criteria_')
                                     ? 'px-2 w-[120px] min-w-[120px]'
@@ -315,6 +316,8 @@ function TableView() {
                                       : ''
                                   }`}
                                 />
+                              ) : key === 'has_ai' && String(val).toLowerCase() === 'no' ? (
+                                <span className="opacity-50">{content}</span>
                               ) : (
                                 content
                               )}
