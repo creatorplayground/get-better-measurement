@@ -35,9 +35,12 @@ function TableView() {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [selectedRows, setSelectedRows] = useState({});
+  const [showHelpDialog, setShowHelpDialog] = useState(false);
   const scrollRef = React.useRef(null);
 
-  useEffect(() => {
+  // Extracted fetch-and-parse logic as loadData
+  const loadData = () => {
     fetch('/data_2025-07-10.csv')
       .then((res) => res.text())
       .then((text) => {
@@ -51,6 +54,10 @@ function TableView() {
           },
         });
       });
+  };
+
+  useEffect(() => {
+    loadData();
   }, []);
 
   const handleMouseDown = (e) => {
@@ -98,10 +105,17 @@ function TableView() {
   return (
     <div className="min-h-screen bg-[#f4f2f1] px-4 pb-16">
       <div className="page-container mx-auto">
-        <div className="page-header py-8 text-center">
-          <a href="https://www.getbettermeasurement.com/" className="text-[#03039d] underline hover:no-underline">
-            Return to Website
-          </a>
+        <div className="page-header py-8 flex-row flex items-center justify-between">
+          <div>
+            <a href="https://www.getbettermeasurement.com/" className="text-[#03039d] underline hover:no-underline">
+              Return to website
+            </a>
+          </div>
+          <div>
+            <button onClick={() => setShowHelpDialog(true)} className="text-[#03039d] underline hover:no-underline">
+              How to use this tool
+            </button>
+          </div>
         </div>
         <div className="page-content">
           <div className="mb-4 sm:hidden">
@@ -116,6 +130,20 @@ function TableView() {
           </div>
           {(showFilters || typeof window === 'undefined' /* SSR fallback */ || window.innerWidth >= 640) && (
             <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <button
+                onClick={() => {
+                  const selectedKeys = Object.keys(selectedRows).filter((key) => selectedRows[key]);
+                  if (selectedKeys.length === 0) {
+                    alert('Please select at least one product to compare.');
+                    return;
+                  }
+                  const filtered = data.filter((row) => selectedRows[row.company_name]);
+                  setData(filtered);
+                }}
+                className="w-full sm:w-auto rounded-md bg-[#03039d] px-4 py-3 text-sm text-white hover:bg-opacity-70 whitespace-nowrap"
+              >
+                Compare
+              </button>
               <input
                 id="filter"
                 name="filter"
@@ -209,6 +237,8 @@ function TableView() {
                   setFilterText('');
                   setSortKey(null);
                   setAscending(true);
+                  setSelectedRows({});
+                  loadData();
                 }}
                 className="w-full sm:w-auto rounded-md bg-white px-4 py-3 text-sm text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 hover:bg-gray-50"
               >
@@ -228,6 +258,7 @@ function TableView() {
               <table className="table-fixed min-w-full divide-y divide-gray-200 text-left text-gray-700">
                 <thead className="bg-white">
                   <tr>
+                    <th className="px-4 py-4 text-sm text-[#03039d] font-medium">Compare</th>
                     {data.length > 0 &&
                       Object.keys(data[0])
                         .filter((key) => key !== 'website_url')
@@ -271,6 +302,22 @@ function TableView() {
                 <tbody>
                   {sortedData.map((row, idx) => (
                     <tr key={idx} className="hover:bg-gray-50 border-b border-white">
+                      <td className="px-4 py-4">
+                        <input
+                          type="checkbox"
+                          checked={!!selectedRows[row.company_name]}
+                          onChange={(e) => {
+                            const updated = { ...selectedRows };
+                            if (e.target.checked) {
+                              updated[row.company_name] = true;
+                            } else {
+                              delete updated[row.company_name];
+                            }
+                            setSelectedRows(updated);
+                          }}
+                          className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                        />
+                      </td>
                       {Object.entries(row)
                         .filter(([key]) => key !== 'website_url')
                         .map(([key, val], i) => {
@@ -393,6 +440,34 @@ function TableView() {
             </p>
             <button
               onClick={() => setActiveCriteria(null)}
+              className="px-4 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-500"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      {showHelpDialog && (
+        <div className="page-dialogs fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 px-4">
+          <div className="bg-white p-6 rounded-md shadow-lg max-w-md">
+            <h2 className="text-lg font-semibold mb-6 text-gray-900">How to use this tool</h2>
+            <div className="mb-8">
+              <ul className="text-gray-700 space-y-2 text-sm">
+                <li>
+                  Use the <span className="font-semibold">Search Bar</span> to filter companies by name, category, or measurement.
+                </li>
+                <li>Sort by any column to organize the table.</li>
+                <li>
+                  Select products using the checkboxes, then click <span className="font-semibold">Compare</span> to focus your view.
+                </li>
+                <li>Click the info icons in headers to see what each feature means.</li>
+                <li>
+                  <span className="font-semibold">Tip:</span> Drag horizontally to scroll and view all columns.
+                </li>
+              </ul>
+            </div>
+            <button
+              onClick={() => setShowHelpDialog(false)}
               className="px-4 py-2 text-sm rounded bg-indigo-600 text-white hover:bg-indigo-500"
             >
               Close
